@@ -92,7 +92,21 @@ int main( int argc, char **argv ) {
 
 		/* Apply Canny alg */
 		Canny(image, image, 100, 300, 3);
+
+		/* Find Contours */
+		vector<vector<Point> > contours;
+		findContours(image, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+		/* Loop through contours and draw on image */
+		for ( unsigned int i = 0; i < contours.size(); i++ ) {
+			double epsilon = 0.1 * arcLength(contours[i], true);
+			approxPolyDP(contours[i], contours[i], epsilon, true);
+			drawContours(image, contours, i, Scalar(255,200,0), 2, 8);
+		}
 		
 		imshow("image", image); waitKey(0);
 	}
+
+	pthread_join(worker, NULL);
+	pthread_mutex_destroy(&lock);
 }
