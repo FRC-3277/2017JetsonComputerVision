@@ -14,7 +14,7 @@ ifdef DEBUG
 	LDFLAGS += ${LD_DEBUG}
 endif
 
-TARGETS = camera cam-pthread
+TARGETS = camera cam-pthread ocv-read
 
 default: all
 
@@ -31,6 +31,13 @@ cam-pthread.o: cam-pthread.cpp
 
 cam-pthread: cam-pthread.o
 	${C++} ${LDFLAGS} -o $@ $^ -pthread -lopencv_core -lopencv_imgproc -lopencv_highgui;
+
+ocv-read.o: ocv-read.cpp
+	${C++} ${CFLAGS} -c $< -o $@;
+
+ocv-read: ocv-read.o
+	${C++} ${LDFLAGS} -o $@ $^ -lopencv_core -lopencv_imgproc -lopencv_highgui;
+
 
 clean:
 	rm -f *.o camera cam-pthread

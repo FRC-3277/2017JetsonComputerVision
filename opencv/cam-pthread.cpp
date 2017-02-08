@@ -7,7 +7,7 @@ using namespace std;
 
 pthread_t worker;
 pthread_mutex_t lock;
-VideoCapture cap(0);
+VideoCapture cap(1);
 
 void * grabFrame(void *arg) {
 
@@ -64,6 +64,7 @@ int main( int argc, char **argv ) {
 			return 1;
 		}
 		pthread_mutex_unlock(&lock);
+		//imwrite( "./noLight.jpg", noLight );
 		imshow("noLight", noLight); waitKey(0);
 
 		/* Get frame with light */
@@ -74,6 +75,7 @@ int main( int argc, char **argv ) {
                         return 1;
                 }
 		pthread_mutex_unlock(&lock);
+		//imwrite( "./withLight.jpg", withLight );
                 imshow("withLight", withLight); waitKey(0);
 
 		/* Convert images to gray scale */
@@ -98,12 +100,12 @@ int main( int argc, char **argv ) {
 		findContours(image, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
 		/* Loop through contours and draw on image */
+		fprintf(stdout, "Contours: %lu\n", contours.size());
 		for ( unsigned int i = 0; i < contours.size(); i++ ) {
-			double epsilon = 0.1 * arcLength(contours[i], true);
+			double epsilon = 0.01 * arcLength(contours[i], true);
 			approxPolyDP(contours[i], contours[i], epsilon, true);
-			drawContours(image, contours, i, Scalar(255,200,0), 2, 8);
+			drawContours(image, contours, i, Scalar(255,255,255), 2, 8);
 		}
-		
 		imshow("image", image); waitKey(0);
 	}
 
