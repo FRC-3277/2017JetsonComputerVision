@@ -40,5 +40,5 @@ ocv-read: ocv-read.o
 
 
 clean:
-	rm -f *.o camera cam-pthread
+	rm -f *.o $(TARGETS)
 
