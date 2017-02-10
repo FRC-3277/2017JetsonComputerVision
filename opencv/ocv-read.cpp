@@ -98,19 +98,25 @@ struct target * findMarkers( vector<vector<Point> > contours ) {
 	}
 
 	/* Loop through contours and locate markers */
-	for ( unsigned int i = 0; i < contours.size() - 1; i++ ) {
+	for ( unsigned int i = 0; i < rect.size() - 1; i++ ) {
+		for ( unsigned int j = i; j < rect.size(); j++ ) {
 
-		RotatedRect a = rect[i];
-		RotatedRect b = rect[i+1];
+			if ( i == j ) {
+				continue;
+			}
 
-		/* Locate markers based on slope of centers and ratio of areas */
-		if ( isRatio(a.size.area(), b.size.area()) && isVertical(a.center, b.center) ) {
-			targ->a->rect = minAreaRect(contours[i]);
-			targ->b->rect = minAreaRect(contours[i+1]);
-			targ->a->rect.points(targ->a->corners);
-			targ->b->rect.points(targ->b->corners);
-			targ->distance = getDistance(a.center, b.center);
-			return targ;
+			RotatedRect a = rect[i];
+			RotatedRect b = rect[j];
+
+			/* Locate markers based on slope of centers and ratio of areas */
+			if ( isRatio(a.size.area(), b.size.area()) && isVertical(a.center, b.center) ) {
+				targ->a->rect = minAreaRect(contours[i]);
+				targ->b->rect = minAreaRect(contours[i+1]);
+				targ->a->rect.points(targ->a->corners);
+				targ->b->rect.points(targ->b->corners);
+				targ->distance = getDistance(a.center, b.center);
+				return targ;
+			}
 		}
 	}
 
