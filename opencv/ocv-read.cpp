@@ -98,12 +98,10 @@ struct target * findMarkers( vector<vector<Point> > contours ) {
 	}
 
 	/* Loop through contours and locate markers */
-	for ( unsigned int i = 0; i < rect.size() - 1; i++ ) {
+	for ( unsigned int i = 0; i < rect.size(); i++ ) {
 		for ( unsigned int j = i; j < rect.size(); j++ ) {
 
-			if ( i == j ) {
-				continue;
-			}
+			if ( i == j ) { continue; }
 
 			RotatedRect a = rect[i];
 			RotatedRect b = rect[j];
