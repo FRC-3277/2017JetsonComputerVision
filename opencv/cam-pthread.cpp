@@ -27,6 +27,11 @@ int main( int argc, char **argv ) {
 		return 1;
 	}
 
+	/* Export GPIO Pin and set to "output" */
+	jetsonTX1GPIONumber ledRing1 = gpio187;
+	gpioExport(ledRing1);
+	gpioSetDirection(ledRing1, outputPin);
+
 	while ( true ) {
 
 		/* Get frame with no light */
@@ -41,6 +46,7 @@ int main( int argc, char **argv ) {
 		imshow("noLight", noLight); waitKey(0);
 
 		/* Get frame with light */
+		gpioSetValue(ledRing1, on);
  		pthread_mutex_lock(&lock);
 		Mat withLight;
                 if ( (cap.read(withLight)) == false ) {
@@ -48,6 +54,7 @@ int main( int argc, char **argv ) {
                         return 1;
                 }
 		pthread_mutex_unlock(&lock);
+		gpioSetValue(ledRing1, off);
 		//imwrite( "./withLight.jpg", withLight );
                 imshow("withLight", withLight); waitKey(0);
 
@@ -100,6 +107,7 @@ int main( int argc, char **argv ) {
 
 	pthread_join(worker, NULL);
 	pthread_mutex_destroy(&lock);
+	gpioUnexport(ledRing1);
 	return 0;
 }
 

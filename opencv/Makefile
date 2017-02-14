@@ -14,30 +14,20 @@ ifdef DEBUG
 	LDFLAGS += ${LD_DEBUG}
 endif
 
-TARGETS = camera cam-pthread ocv-read
+TARGETS = cam-pthread 
 
 default: all
 
 all: $(TARGETS)
 
-camera.o: camera.C
-	${C++} ${CFLAGS} -c $< -o $@;
-
-camera: camera.o
-	${C++} ${LDFLAGS} -o $@ $^ -lopencv_core -lopencv_imgproc -lopencv_highgui;
-
 cam-pthread.o: cam-pthread.cpp cam-pthread.h
 	${C++} ${CFLAGS} -c $< -o $@;
 
-cam-pthread: cam-pthread.o
-	${C++} ${LDFLAGS} -o $@ $^ -pthread -lopencv_core -lopencv_imgproc -lopencv_highgui;
-
-ocv-read.o: ocv-read.cpp
+jetsonGPIO.o: jetsonGPIO.c jetsonGPIO.h
 	${C++} ${CFLAGS} -c $< -o $@;
 
-ocv-read: ocv-read.o
-	${C++} ${LDFLAGS} -o $@ $^ -lopencv_core -lopencv_imgproc -lopencv_highgui;
-
+cam-pthread: jetsonGPIO.o cam-pthread.o
+	${C++} ${LDFLAGS} -o $@ $^ -pthread -lopencv_core -lopencv_imgproc -lopencv_highgui;
 
 clean:
 	rm -f *.o $(TARGETS)

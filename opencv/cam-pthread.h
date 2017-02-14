@@ -1,3 +1,4 @@
+#include "jetsonGPIO.h"
 #include <opencv2/opencv.hpp>
 #include <pthread.h>
 #include <stdio.h>
