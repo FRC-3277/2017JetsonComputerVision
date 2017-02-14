@@ -26,7 +26,7 @@ camera.o: camera.C
 camera: camera.o
 	${C++} ${LDFLAGS} -o $@ $^ -lopencv_core -lopencv_imgproc -lopencv_highgui;
 
-cam-pthread.o: cam-pthread.cpp
+cam-pthread.o: cam-pthread.cpp cam-pthread.h
 	${C++} ${CFLAGS} -c $< -o $@;
 
 cam-pthread: cam-pthread.o
